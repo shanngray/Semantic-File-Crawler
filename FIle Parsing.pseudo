@@ -32,9 +32,9 @@ function initializeDatabase():
         'walkdate': 'DATETIME'
         'walked' 'Y/N'
         'analyseddate' 'DATETIME'
-        'analysed' 'Y/N'
+        'analysed' [Yes, No, Pending, Update]
         'embeddeddate' 'DATETIME'
-        'embedded' 'Y/N'
+        'embedded' [Yes, No, Pending, Update]
     })
 
 file_sys_db = initializeDatabase
@@ -56,11 +56,19 @@ parseFileSystem(file_sys_db):
                 then if file_modified(file):
                     then update_file(file):
                     file.walked('YES')
+                    if file.analysed == YES:
+                        file.analysed = 'Update'
+                    else:
+                        file.analysed = 'Pending'
                 else:
                     file.walked('YES')
+                    // file has changed so no need to re-analyse
             else:
                 file_sys_db.add_file(file)
-     
+                file.analysed = 'Pending' // Queue the file to be analysed
+    
+    // After walking the file system, any file with walked [NO] needs to be
+    // removed from DB
     for file in files_list:
         if file.walked == 'N':
             file_sys_db.remove_file(file) // removes files from DB
@@ -74,13 +82,10 @@ parseFileSystem(file_sys_db):
 analyseFileSystem(file_sys_db):
     for file in file_sys_db.files:
         if file.analysed == 'N':
-            analyse_file(file)
-            file.analysed = 'Y'
-            if file.analysed == 'N':
-                file.analyseddate = datetime.now()
-                file.analysed = 'Y'
-                file.embeddeddate = datetime.now()
-                file.embedded = 'Y'
+            analyse_file(file) // calls our agent workflow to analyse the file
+            file.analysed = 'Y' // update analysed flag
+            file.analyseddate = datetime.now()
+
 
     
     print(file_list)
