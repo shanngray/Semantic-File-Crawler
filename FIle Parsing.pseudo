@@ -1,0 +1,87 @@
+function initializeDatabase():
+    // Initialize a database or data structure to store the file information
+    database = new Database()
+    
+    database.createTable('disks', {
+        'disk_id': 'TEXT PRIMARY KEY', //unique_id for disk
+        'disk_name': 'TEXT', //name of disk
+        'diskpath': 'TEXT', //full path to disk
+        'disksize': 'INTEGER', //size of disk in bytes
+        'disktype': 'TEXT', //type of disk
+        'diskowner': 'TEXT', //owner of disk
+    })
+
+    database.createTable('directories', {
+        'directory_id': 'TEXT PRIMARY KEY', //unique_id for directory
+        'disk_id': 'TEXT', //unique_id for disk
+        'directory_name': 'TEXT', //name of directory
+        'directorypath': 'TEXT', //full path to directory
+        'parentdirectory': 'TEXT PRIMARY KEY ', // unique_id for parent dir
+    })
+
+    // Define the table schema
+    database.createTable('files', {
+        'file_id': 'TEXT PRIMARY KEY', //unique_id for file
+        'dir_id': 'TEXT', //unique_id for directory
+        'filename': 'TEXT',
+        'filetype': 'TEXT',
+        'filesize': 'INTEGER',
+        'fileowner': 'TEXT',
+        'lastmodified': 'DATETIME',
+        'creationdate': 'DATETIME',
+        'walkdate': 'DATETIME'
+        'walked' 'Y/N'
+        'analyseddate' 'DATETIME'
+        'analysed' 'Y/N'
+        'embeddeddate' 'DATETIME'
+        'embedded' 'Y/N'
+    })
+
+file_sys_db = initializeDatabase
+
+parseFileSystem(file_sys_db):
+    
+    drive_list = file_sys_db.disks
+    file_list = file_sys_db.files
+    dir_list = file_sys_db.directories
+    
+    for file in file_system:
+        file.walked = 'N' //reset walk flag
+
+    for drive in drive_list:
+        os.walk(drive.diskpath)
+        // Walk over every dir and file in the drive
+        for root, dirs, file in os.walk(drive.diskpath): 
+            if existing(root, file, file_list):
+                then if file_modified(file):
+                    then update_file(file):
+                    file.walked('YES')
+                else:
+                    file.walked('YES')
+            else:
+                file_sys_db.add_file(file)
+     
+    for file in files_list:
+        if file.walked == 'N':
+            file_sys_db.remove_file(file) // removes files from DB
+        else:
+            file.walkeddate = datetime.now() //updated last walked date
+
+    //Need to walk directories to check if a directory has been added/removed
+    //Production code would need to check if for files that have been moved from
+    // one directory to another
+
+analyseFileSystem(file_sys_db):
+    for file in file_sys_db.files:
+        if file.analysed == 'N':
+            analyse_file(file)
+            file.analysed = 'Y'
+            if file.analysed == 'N':
+                file.analyseddate = datetime.now()
+                file.analysed = 'Y'
+                file.embeddeddate = datetime.now()
+                file.embedded = 'Y'
+
+    
+    print(file_list)
+
