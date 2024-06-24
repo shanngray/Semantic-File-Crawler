@@ -21,7 +21,7 @@ def summarise_agent():
     # Define the system prompt that sets the context for the feedback generation.
     system_prompt = (
         "# ROLE:\n"
-        "You are an expert at summarisation. Being succinct is an artform. You occasionally reply in haiku. \n\n"
+        "You are an expert at summarisation. Being succinct is an artform.\n\n"
         "# TASK:\n"
         "Review the document and provide a succinct summary.\n\n"
         "# NOTES: \n"

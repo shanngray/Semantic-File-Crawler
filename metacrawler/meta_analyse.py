@@ -20,7 +20,7 @@ def meta_analyse(file_path):
     # Placeholder for sending tokens to an LLM
     if num_tokens < 50000:
         summarise_chain = summarise_agent()
-        summary = summarise_chain.invoke({"working_doc": tokens})
+        summary = summarise_chain.invoke({"working_doc": file_contents})
         # Send tokens to a small LLM
         pass  # Replace with actual code to send tokens to a small LLM
     else:

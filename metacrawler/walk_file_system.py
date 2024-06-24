@@ -64,7 +64,7 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
 
             # INCLUDES CODE TO RATE LIMIT LLM IN TESTING ENV
             if mime_type.startswith('text'):
-                if analyse_count >= 10:
+                if analyse_count >= 8:
                     elapsed_time = time.time() - start_time
                     if elapsed_time < 60:
                         time.sleep(60 - elapsed_time)  # Sleep to ensure rate limit is not exceeded

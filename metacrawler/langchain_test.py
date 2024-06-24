@@ -31,4 +31,4 @@ chain = GraphCypherQAChain.from_llm(
     llm, graph=graph, verbose=True
 )
 
-chain.invoke({"query": "Return all references to Dawson."})
+chain.invoke({"query": "List the summary field for files that have Num_tokens greater than zero."})
