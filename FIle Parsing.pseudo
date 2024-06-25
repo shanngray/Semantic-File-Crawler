@@ -45,7 +45,7 @@ parseFileSystem(file_sys_db):
     file_list = file_sys_db.files
     dir_list = file_sys_db.directories
     
-    for file in file_system:
+    for file in file_list:
         file.walked = 'N' //reset walk flag
 
     for drive in drive_list:

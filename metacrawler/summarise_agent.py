@@ -1,5 +1,26 @@
 """
-This module defines an agent that summarises documents.
+Module: summarise_agent
+
+Description:
+------------
+This module defines an agent that processes and summarises documents using a language model.
+
+Attributes/Parameters:
+----------------------
+N/A
+
+Methods/Returns:
+----------------
+summarise_agent: function
+    Processes a document and summarises it.
+    
+    Parameters:
+    -----------
+    N/A
+    
+    Returns:
+    --------
+    summary_chain: A processing chain that takes a user story, applies modifications, and generates feedback.
 """
 
 from langchain_core.output_parsers import StrOutputParser
@@ -8,15 +29,20 @@ from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 def summarise_agent():
     """
-    Processes a document and summarises.
-
-    Args:
-        N/A
-
+    Function: summarise_agent
+    
+    Description:
+    ------------
+    Processes a document and summarises it using a language model.
+    
+    Parameters:
+    -----------
+    N/A
+    
     Returns:
-        A processing chain that takes a user story, applies modifications, and generates feedback.
+    --------
+    summary_chain: A processing chain that takes a user story, applies modifications, and generates feedback.
     """
-
     
     # Define the system prompt that sets the context for the feedback generation.
     system_prompt = (

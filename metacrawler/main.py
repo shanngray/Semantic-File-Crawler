@@ -1,20 +1,58 @@
+"""
+Module: main
+
+Description:
+------------
+This module initializes the file system graph, starts the file system traversal, and optionally
+performs debug operations such as printing the number of nodes in the graph. It serves as the entry
+point for the MetaCrawler application.
+
+Attributes:
+------------
+DEBUG : bool
+    A flag indicating whether debug mode is enabled, determined by the 'TEST' environment variable.
+"""
+
 import os
 from file_system_graph import FileSystemGraph
 from walk_file_system import walk_file_system
+from dotenv import load_dotenv
+from mock_filesystem import create_mock_filesystem, load_mock_fs, close_mock_fs
 
-#DEBUG = os.getenv('DEBUG', 'False').lower() in ('true', '1', 't')  # Read DEBUG from environment variable
-DEBUG = True
+load_dotenv(".env")
+DEBUG = os.getenv('TEST', 'False').lower() in ('true', '1', 't')  # Read TEST from environment variable
+
 def main():
+    """
+    Function: main
+    
+    Description:
+    ------------
+    The main function initializes the file system graph, starts the file system traversal, and optionally
+    performs debug operations such as printing the number of nodes in the graph.
+    
+    Parameters:
+    ------------
+    None
+    
+    Returns:
+    ------------
+    None
+    """
     try:
         uri = "bolt://localhost:7687"
         username = "neo4j"
         password = "abcd1234"
         fs_graph = FileSystemGraph(uri, username, password)
 
+        print(DEBUG)
         if DEBUG:
             print(f"Connecting to database at {uri} with username {username}")
 
-        root_dir = "/Users/shanngray/AI_Projects/MetaCrawler"  # Starting point for file system traversal
+        create_mock_filesystem()
+        load_mock_fs()
+        root_dir = '/root'
+
         print(f"Starting file system walk at: {root_dir}")  # Debug: Confirm the directory path
 
         walk_file_system(root_dir, fs_graph)
@@ -36,7 +74,23 @@ def main():
             print("Database connection closed")
     except Exception as e:
         print(f"An error occurred: {e}")
+    finally:
+        close_mock_fs()
 
 if __name__ == "__main__":
+    """
+    Entity Type: Script Execution
+    
+    Description:
+    ------------
+    Entry point for the script. Calls the main function to start the process.
+    
+    Attributes/Parameters:
+    ----------------------
+    None
+    
+    Methods/Returns:
+    ----------------
+    None
+    """
     main()
-

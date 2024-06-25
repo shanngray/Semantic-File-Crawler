@@ -38,19 +38,20 @@ poetry shell
 
 Copy the `.env.example` and relabel it to `.env`.
 To speed through and get something working, use the following settings instead.
+*Project Directory needs to be updated with full path*
 ```env
 LANGCHAIN_TRACING_V2="false"
 LANGCHAIN_API_KEY="" # Not needed 
 LANGCHAIN_TRACING_V2 = "false"
-LANGCHAIN_PROJECT = "AdAM"
+LANGCHAIN_PROJECT = "MetaCrawler"
 COHERE_API_KEY = "<REQUIRED>" 
-PROJECT_DIRECTORY = "AdAM/adam"
+PROJECT_DIRECTORY = "MetaCrawler/metacrawler"
 DEBUG="True"
 ```
 
-Run this on the root directory (so at /AdAM directory)
+Run this on the root directory (so at /MetaCrawler directory)
 ```bash
 poetry run py adam/main.py
-Hello, how can I help you today?
+
 
 ```
