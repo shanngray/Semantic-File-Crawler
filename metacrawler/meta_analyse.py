@@ -14,6 +14,7 @@ Functions:
 import tiktoken
 import mimetypes
 from summarise_agent import summarise_agent
+from hashtag_agent import hashtag_agent
 
 def meta_analyse(file_path):
     """
@@ -46,16 +47,14 @@ def meta_analyse(file_path):
     tokens = tokenizer.encode(file_contents)
     num_tokens = len(tokens)
 
-    # Placeholder for sending tokens to an LLM
+    # Send tokens to a small LLM
     if num_tokens < 50000:
-        summarise_chain = summarise_agent()
-        summary = summarise_chain.invoke({"working_doc": file_contents})
-        # Send tokens to a small LLM
-        pass  # Replace with actual code to send tokens to a small LLM
+        summary = summarise_agent()
+        embedded_summary = embed(summary)
+        hashtags = hashtag_agent()
     else:
         # Send tokens to a large LLM
         print("TOO MANY TOKENS!")
         summary = "DOC WAS TOO LONG!!"
-        pass  # Replace with actual code to send tokens to a large LLM
     
-    return num_tokens, summary
+    return num_tokens, summary, embedded_summary, hashtags

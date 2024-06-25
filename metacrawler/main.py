@@ -49,9 +49,10 @@ def main():
         if DEBUG:
             print(f"Connecting to database at {uri} with username {username}")
 
-        create_mock_filesystem()
-        load_mock_fs()
-        root_dir = '/root'
+        #create_mock_filesystem()
+        #load_mock_fs()
+        #root_dir = '/root'
+        root_dir='tests/Test_Drive'
 
         print(f"Starting file system walk at: {root_dir}")  # Debug: Confirm the directory path
 
@@ -74,8 +75,8 @@ def main():
             print("Database connection closed")
     except Exception as e:
         print(f"An error occurred: {e}")
-    finally:
-        close_mock_fs()
+    #finally:
+    #    close_mock_fs()
 
 if __name__ == "__main__":
     """

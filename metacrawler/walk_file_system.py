@@ -81,6 +81,7 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
             # Initialize num_tokens and summary with default values
             num_tokens = 0
             summary = ""
+            hashtags = []
 
             # Check if the file has been modified since the last time it was processed
             existing_file_node = fs_graph.get_file_node(file_id=file_id)
@@ -95,8 +96,7 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
 
             # Only get MIME type for new files
             mime_type = get_mime_type(file_path) if not existing_file_node else existing_file_node['mime_type']
-
-            # INCLUDES CODE TO RATE LIMIT LLM IN TESTING ENV
+            '''# INCLUDES CODE TO RATE LIMIT LLM IN TESTING ENV
             if mime_type.startswith('text'):
                 if analyse_count >= 8:
                     elapsed_time = time.time() - start_time
@@ -105,9 +105,12 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
                     analyse_count = 0  # Reset counter
                     start_time = time.time()  # Reset start time
 
-                num_tokens, summary = meta_analyse(file_path)
+                num_tokens, summary, hashtags = meta_analyse(file_path)
                 analyse_count += 1  # Increment counter
-
+            '''
+            if mime_type.startswith('text'):
+                num_tokens, summary, embedded_summary, hashtags = meta_analyse(file_path)
+                
             file_result = fs_graph.create_file_node(
                 file_id=hash(file_path),
                 dir_id=hash(root),
@@ -115,15 +118,14 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
                 filetype=os.path.splitext(file)[1],
                 filesize=file_stats.st_size,
                 fileowner=file_stats.st_uid,
+                hashtags=hashtags,
                 lastmodified=last_modified_time,
                 lastchecked=current_walk_time,
                 creationdate=file_stats.st_ctime,
-                walked=True,
-                analysed=False,
-                embedded=False,
-                mime_type=mime_type,  # Add MIME type
+                mime_type=mime_type,
                 num_tokens=num_tokens,
-                summary=summary
+                summary=summary,
+                embedded_summary=embedded_summary 
             )
             
             if DEBUG:
@@ -134,4 +136,3 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
 
     # After walking, remove nodes that weren't checked in this walk
     clean_up_file_system(current_walk_time, fs_graph)
-

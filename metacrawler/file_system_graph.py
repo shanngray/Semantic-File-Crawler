@@ -19,7 +19,7 @@ class FileSystemGraph:
         Closes the Neo4j session and driver.
     _execute_query(query, **kwargs):
         Executes a Cypher query with the provided parameters.
-    create_file_node(file_id, dir_id, filename, filetype, filesize, fileowner, lastmodified, creationdate, walked, analysed, embedded, mime_type, num_tokens, summary, lastchecked):
+    create_file_node(file_id, dir_id, filename, filetype, filesize, fileowner, lastmodified, creationdate, mime_type, num_tokens, summary, lastchecked, hashtags, embedded_summary):
         Creates or updates a file node in the graph.
     create_or_update_directory_node(dir_id, parent_dir_id, dirname, lastchecked):
         Creates or updates a directory node in the graph.
@@ -84,7 +84,7 @@ class FileSystemGraph:
             print(f"Error executing query: {e}")
             raise
 
-    def create_file_node(self, file_id, dir_id, filename, filetype, filesize, fileowner, lastmodified, creationdate, walked, analysed, embedded, mime_type, num_tokens, summary, lastchecked):
+    def create_file_node(self, file_id, dir_id, filename, filetype, filesize, fileowner, lastmodified, creationdate, mime_type, num_tokens, summary, lastchecked, hashtags, embedded_summary):
         """
         Creates or updates a file node in the graph.
 
@@ -102,16 +102,12 @@ class FileSystemGraph:
             The size of the file in bytes.
         fileowner : str
             The owner of the file.
+        hashtags : list
+            The hashtags of the file.
         lastmodified : str
             The last modified date of the file.
         creationdate : str
             The creation date of the file.
-        walked : bool
-            Whether the file has been walked.
-        analysed : bool
-            Whether the file has been analysed.
-        embedded : bool
-            Whether the file is embedded.
         mime_type : str
             The MIME type of the file.
         num_tokens : int
@@ -120,6 +116,8 @@ class FileSystemGraph:
             The summary of the file.
         lastchecked : str
             The date when the file was last checked.
+        embedded_summary : list
+            The embedding of the summary.
 
         Returns:
         -------
@@ -130,18 +128,21 @@ class FileSystemGraph:
             "MERGE (f:File {file_id: $file_id}) "
             "ON CREATE SET f.dir_id = $dir_id, f.filename = $filename, f.filetype = $filetype, "
             "f.filesize = $filesize, f.fileowner = $fileowner, f.lastmodified = $lastmodified, "
-            "f.creationdate = $creationdate, f.walked = $walked, f.analysed = $analysed, f.embedded = $embedded, "
-            "f.mime_type = $mime_type, f.num_tokens = $num_tokens, f.summary = $summary, f.lastchecked = $lastchecked "
+            "f.creationdate = $creationdate, f.mime_type = $mime_type, f.num_tokens = $num_tokens, "
+            "f.summary = $summary, f.lastchecked = $lastchecked, f.hashtags = $hashtags, "
+            "f.embedded_summary = $embedded_summary "
             "ON MATCH SET f.dir_id = $dir_id, f.filename = $filename, f.filetype = $filetype, "
             "f.filesize = $filesize, f.fileowner = $fileowner, f.lastmodified = $lastmodified, "
-            "f.creationdate = $creationdate, f.walked = $walked, f.analysed = $analysed, f.embedded = $embedded, "
-            "f.mime_type = $mime_type, f.num_tokens = $num_tokens, f.summary = $summary, f.lastchecked = $lastchecked "
+            "f.creationdate = $creationdate, f.mime_type = $mime_type, f.num_tokens = $num_tokens, "
+            "f.summary = $summary, f.lastchecked = $lastchecked, f.hashtags = $hashtags, "
+            "f.embedded_summary = $embedded_summary "
             "RETURN f"
         )
         return self._execute_query(query, file_id=file_id, dir_id=dir_id, filename=filename, filetype=filetype,
                                    filesize=filesize, fileowner=fileowner, lastmodified=lastmodified,
-                                   creationdate=creationdate, walked=walked, analysed=analysed, embedded=embedded,
-                                   mime_type=mime_type, num_tokens=num_tokens, summary=summary, lastchecked=lastchecked)
+                                   creationdate=creationdate, mime_type=mime_type, num_tokens=num_tokens,
+                                   summary=summary, lastchecked=lastchecked, hashtags=hashtags,
+                                   embedded_summary=embedded_summary)
 
     def create_or_update_directory_node(self, dir_id, parent_dir_id, dirname, lastchecked):
         """

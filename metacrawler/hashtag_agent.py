@@ -1,9 +1,9 @@
 """
-Module: summarise_agent
+Module: tags_agent
 
 Description:
 ------------
-This module defines an agent that processes and summarises documents using a language model.
+This module defines an agent that processes and creates hashtags for documents using a language model.
 
 Attributes/Parameters:
 ----------------------
@@ -12,7 +12,7 @@ N/A
 Methods/Returns:
 ----------------
 summarise_agent: function
-    Processes a document and summarises it.
+    Processes a document and tags it.
     
     Parameters:
     -----------
@@ -20,7 +20,7 @@ summarise_agent: function
     
     Returns:
     --------
-    summary: A brief summary of the document.
+    hashtags: A list of hashtags for the document.
 """
 
 from langchain_core.output_parsers import StrOutputParser
@@ -28,13 +28,13 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-def summarise_agent():
+def hashtag_agent():
     """
-    Function: summarise_agent
+    Function: hash_agent
     
     Description:
     ------------
-    Processes a document and summarises it using a language model.
+    Processes a document and creates hashtags it using a language model.
     
     Parameters:
     -----------
@@ -42,23 +42,23 @@ def summarise_agent():
     
     Returns:
     --------
-    summary: A brief summary of the document.
+    hashtags: A list of hashtags for the document.
     """
     
     # Define the system prompt that sets the context for the feedback generation.
     system_prompt = (
         "# ROLE:\n"
-        "You are an expert at summarisation. Being succinct is an artform.\n\n"
+        "You are an expert at social media and finding the best hashtags to describe a document.\n\n"
         "# TASK:\n"
-        "Review the document and provide a succinct summary.\n\n"
+        "Review the document and provide a list of hashtags.\n\n"
         "# NOTES: \n"
         " - Don't make anything up\n."
-        " - Make sure your response is clear, concise and analytical.\n"
-        " - Please only reply with the summary and don't add any extra commentary."
+        " - Make sure the hashtags are meaningful and categorise the document in a useful manner.\n"
+        " - Please only reply with the hashtags and don't add any extra commentary."
     )
     
     # Initialize the language model with specific parameters for controlled generation.
-    llm = ChatOpenAI(model="gpt-4o", temperature=0.4)
+    llm = ChatOpenAI(model="gpt-4o",temperature=0.2)
     #llm = ChatCohere(model_name="command-r-plus", temperature=0.4)
     
     # Create a prompt template that includes the system prompt and placeholders for dynamic content.
@@ -74,8 +74,14 @@ def summarise_agent():
     output_parser = StrOutputParser()
  
     # Chain the components to process the input and generate feedback.
-    summary_chain = query_prompt | llm | output_parser
+    hashtag_chain = query_prompt | llm | output_parser
 
-    summary = summary_chain.invoke({"working_doc": file_contents})
+    raw_hashtags = hashtag_chain.invoke({"working_doc": file_contents})
 
-    return summary
+    # Extract hashtags from the raw string
+    hashtags = extract_hashtags(raw_hashtags)
+    # If no hashtags were found, return an empty list
+    if not hashtags:
+        return []
+
+    return hashtags

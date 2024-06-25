@@ -16,6 +16,7 @@ python-magic = "^0.4.27"
 tiktoken = "^0.7.0"
 langchain-cohere = "^0.1.8"
 mockfs = "^2.0.0"
+langchain-openai = "^0.1.10"
 
 
 [build-system]
