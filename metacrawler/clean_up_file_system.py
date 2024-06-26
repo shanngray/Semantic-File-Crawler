@@ -14,7 +14,8 @@ def clean_up_file_system(current_walk_time, fs_graph):
     
     Description:
     ------------
-    Removes files and directories from the graph that weren't present in the current walk.
+    Removes files and directories from the graph that weren't present in the current walk,
+    and cleans up orphaned hashtag nodes.
     
     Parameters:
     -----------
@@ -55,4 +56,7 @@ def clean_up_file_system(current_walk_time, fs_graph):
     for record in outdated_files:
         fs_graph.remove_file(record['file_id'])
     
-    print(f"Cleanup complete. Removed {len(outdated_files)} files and {len(outdated_dirs)} directories.")
+    # Clean up orphaned hashtag nodes
+    orphaned_hashtags = fs_graph.cleanup_orphaned_hashtags()
+    
+    print(f"Cleanup complete. Removed {len(outdated_files)} files, {len(outdated_dirs)} directories, and {len(orphaned_hashtags)} orphaned hashtags.")

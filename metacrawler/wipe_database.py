@@ -5,9 +5,6 @@ Description:
 ------------
 This script wipes the entire database by deleting all nodes and relationships.
 """
-
-from file_system_graph import FileSystemGraph
-
 def main():
     """
     Function: main

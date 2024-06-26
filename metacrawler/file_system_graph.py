@@ -35,6 +35,12 @@ class FileSystemGraph:
         Retrieves a file node from the graph.
     wipe_database():
         Wipes the entire database by deleting all nodes and relationships.
+    create_hashtag_node(hashtag):
+        Creates or updates a hashtag node in the graph.
+    link_file_to_hashtag(file_id, hashtag):
+        Creates a relationship between a file and a hashtag.
+    get_file_hashtags(file_id):
+        Retrieves all hashtags associated with a file.
     """
 
     def __init__(self, uri, user, password):
@@ -311,3 +317,73 @@ class FileSystemGraph:
         """
         query = "MATCH (n) DETACH DELETE n"
         self._execute_query(query)
+
+    def create_hashtag_node(self, hashtag):
+        """
+        Creates or updates a hashtag node in the graph.
+
+        Parameters:
+        ----------
+        hashtag : str
+            The hashtag to be created or updated.
+
+        Returns:
+        -------
+        list
+            The result of the query execution.
+        """
+        query = (
+            "MERGE (h:Hashtag {name: $hashtag}) "
+            "RETURN h"
+        )
+        return self._execute_query(query, hashtag=hashtag)
+
+    def link_file_to_hashtag(self, file_id, hashtag):
+        """
+        Creates a relationship between a file and a hashtag.
+
+        Parameters:
+        ----------
+        file_id : str
+            The identifier of the file.
+        hashtag : str
+            The hashtag to be linked.
+        """
+        query = (
+            "MATCH (f:File {file_id: $file_id}), (h:Hashtag {name: $hashtag}) "
+            "MERGE (f)-[:HAS_TAG]->(h)"
+        )
+        self._execute_query(query, file_id=file_id, hashtag=hashtag)
+
+    def get_file_hashtags(self, file_id):
+        """
+        Retrieves all hashtags associated with a file.
+
+        Parameters:
+        ----------
+        file_id : str
+            The identifier of the file.
+
+        Returns:
+        -------
+        list
+            A list of hashtags associated with the file.
+        """
+        query = (
+            "MATCH (f:File {file_id: $file_id})-[:HAS_TAG]->(h:Hashtag) "
+            "RETURN h.name AS hashtag"
+        )
+        result = self._execute_query(query, file_id=file_id)
+        return [record['hashtag'] for record in result]
+
+    def cleanup_orphaned_hashtags(self):
+        """
+        Removes hashtag nodes that are no longer linked to any file nodes.
+        """
+        query = (
+            "MATCH (h:Hashtag) "
+            "WHERE NOT (h)<-[:HAS_TAG]-() "
+            "DELETE h"
+        )
+        result = self._execute_query(query)
+        return result

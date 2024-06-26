@@ -31,4 +31,4 @@ chain = GraphCypherQAChain.from_llm(
     llm, graph=graph, verbose=True
 )
 
-chain.invoke({"query": "List the summary field for files that have Num_tokens greater than zero."})
+chain.invoke({"query": "What hashtags are related to loans."})

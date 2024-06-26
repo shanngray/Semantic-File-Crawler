@@ -17,6 +17,7 @@ from file_system_graph import FileSystemGraph
 from get_mime_type import get_mime_type
 from meta_analyse import meta_analyse
 from clean_up_file_system import clean_up_file_system
+from azure_doc_converter import azure_doc_converter  # Import the Azure document converter function
 
 DEBUG = os.getenv('TEST', 'False').lower() in ('true', '1', 't')  # Read DEBUG from environment variable
 
@@ -71,6 +72,11 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
         )
         print(f"Directory node created/updated: {dir_result}")  # Debug: Log result of directory node creation
 
+        # Link directory to its parent (if it's not the root directory)
+        if parent_dir_id is not None:
+            fs_graph.link_directory_to_directory(dir_id, parent_dir_id)
+            print(f"Linked directory {dir_id} to parent {parent_dir_id}")  # Debug: Log linking of directories
+
         # Iterate over files and create file nodes
         for file in files:
             file_path = os.path.join(root, file)
@@ -81,6 +87,7 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
             # Initialize num_tokens and summary with default values
             num_tokens = 0
             summary = ""
+            embedded_summary = []
             hashtags = []
 
             # Check if the file has been modified since the last time it was processed
@@ -109,8 +116,20 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
                 analyse_count += 1  # Increment counter
             '''
             if mime_type.startswith('text'):
-                num_tokens, summary, embedded_summary, hashtags = meta_analyse(file_path)
-                
+                num_tokens, summary, embedded_summary, hashtags = meta_analyse(file_path=file_path)
+            elif mime_type in [
+                'application/pdf',
+                'image/jpeg', 'image/png', 'image/bmp', 'image/tiff', 'image/heif',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                'text/html'
+            ]:
+                converted_text = azure_doc_converter(file_path)
+                num_tokens, summary, embedded_summary, hashtags = meta_analyse(converted_text=converted_text)
+            else:
+                num_tokens, summary, embedded_summary, hashtags = 0, "", [], []
+
             file_result = fs_graph.create_file_node(
                 file_id=hash(file_path),
                 dir_id=hash(root),
@@ -130,6 +149,12 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
             
             if DEBUG:
                 print(f"File node created/updated: {file_result}")  # Debug: Log result of file node creation
+
+            # After creating the file node
+            if hashtags:
+                for hashtag in hashtags:
+                    fs_graph.create_hashtag_node(hashtag)
+                    fs_graph.link_file_to_hashtag(file_id, hashtag)
 
             # Link file to its directory
             fs_graph.link_file_to_directory(file_id=file_id, dir_id=dir_id)

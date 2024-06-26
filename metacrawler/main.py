@@ -52,7 +52,7 @@ def main():
         #create_mock_filesystem()
         #load_mock_fs()
         #root_dir = '/root'
-        root_dir='tests/Test_Drive'
+        root_dir='/Users/shanngray/AI_Projects/MetaCrawler/tests/Test_Drive'
 
         print(f"Starting file system walk at: {root_dir}")  # Debug: Confirm the directory path
 

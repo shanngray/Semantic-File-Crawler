@@ -8,7 +8,7 @@ Meta Crawler is designed to crawl over file systems and networks to create seman
 A secondary benefit is producing version controls across different files and data - ensuring that no duplicates or outate data exists (not achievable with traditional programming techniques).
 The ultimate goal is to add more meta tags, functioning as a type of a Search Engine Optimisation for future AI agents to retrieve accurate information.
 
-![Meta Crawler](metacrawler.png)
+![Meta Crawler](MetaCrawler.jpeg)
 
 ## Installation
 Download the latest version of [Neo4j](https://neo4j.com/download/).
@@ -46,7 +46,8 @@ LANGCHAIN_TRACING_V2 = "false"
 LANGCHAIN_PROJECT = "MetaCrawler"
 COHERE_API_KEY = "<REQUIRED>" 
 PROJECT_DIRECTORY = "MetaCrawler/metacrawler"
-DEBUG="True"
+AZURE_DOC_KEY="<REQUIRED>"
+TEST="True"
 ```
 
 Run this on the root directory (so at /MetaCrawler directory)

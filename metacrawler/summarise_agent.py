@@ -28,7 +28,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
-def summarise_agent():
+def summarise_agent(file_contents):
     """
     Function: summarise_agent
     

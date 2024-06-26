@@ -27,8 +27,9 @@ from langchain_core.output_parsers import StrOutputParser
 #from langchain_cohere import ChatCohere
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from extract_hashtags import extract_hashtags
 
-def hashtag_agent():
+def hashtag_agent(file_contents):
     """
     Function: hash_agent
     
