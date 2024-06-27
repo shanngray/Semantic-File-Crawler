@@ -11,14 +11,21 @@ The ultimate goal is to add more meta tags, functioning as a type of a Search En
 ![Meta Crawler](MetaCrawler.jpeg)
 
 ## Installation
-Download the latest version of [Neo4j](https://neo4j.com/download/).
+### Neo4j
+1. Download the latest version of [Neo4j](https://neo4j.com/download/).
+2. Create a new database called "Meta Crawler" 
+```
+uri = "bolt://localhost:7687"
+username = "neo4j"
+password = "abcd1234"
+```
+3. Install APOC Plugin for Neo4j
+### Azure AI Document Intelligence
+1. Create a new resource in the [Azure Portal](https://portal.azure.com/).
+2. Search for "Azure AI Document Intelligence" and create a new resource.
+3. Instructions: https://learn.microsoft.com/en-us/azure/ai-services/document-intelligence/create-document-intelligence-resource?view=doc-intel-4.0.0
 
-Create a new database called "Meta Crawler" => password = abcd1234
-Install APOC Plugin for Neo4j
-
-
-
-Install poetry 
+### Poetry 
 ```angular2html
 pip install poetry@1.8.2
 ```
@@ -35,24 +42,32 @@ If you are not inside a virtual env i.e.
 ```bash
 poetry shell
 ```
-
+### Final Steps
 Copy the `.env.example` and relabel it to `.env`.
 To speed through and get something working, use the following settings instead.
-*Project Directory needs to be updated with full path*
+
+<u>Project Directory needs to be updated with full path</u>
 ```env
 LANGCHAIN_TRACING_V2="false"
 LANGCHAIN_API_KEY="" # Not needed 
 LANGCHAIN_TRACING_V2 = "false"
 LANGCHAIN_PROJECT = "MetaCrawler"
-COHERE_API_KEY = "<REQUIRED>" 
+OPENAI_API_KEY = "<REQUIRED>" 
 PROJECT_DIRECTORY = "MetaCrawler/metacrawler"
 AZURE_DOC_KEY="<REQUIRED>"
 TEST="True"
 ```
+Amend "root_directory" to the full path of the directory you wish to crawl.
 
+main.py
+```
+root_dir='.../MetaCrawler/tests/Test_Drive'
+
+```
+### Start MetaCrawler
 Run this on the root directory (so at /MetaCrawler directory)
 ```bash
-poetry run py adam/main.py
+poetry run py metacrawler/main.py
 
 
 ```
