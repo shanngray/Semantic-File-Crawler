@@ -48,10 +48,6 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
         print(f"Warning: The specified root directory is empty: {root_dir}")
         return
 
-    # Adding in rate limit for calls to LLM ***NOT REQUIRED FOR PRODUCTION USE***
-    analyse_count = 0  # Initialize counter for meta_analyse calls
-    start_time = time.time()  # Record the start time
-
     current_walk_time = time.time()
 
     for root, dirs, files in os.walk(root_dir):
@@ -103,18 +99,7 @@ def walk_file_system(root_dir: str, fs_graph: FileSystemGraph):
 
             # Only get MIME type for new files
             mime_type = get_mime_type(file_path) if not existing_file_node else existing_file_node['mime_type']
-            '''# INCLUDES CODE TO RATE LIMIT LLM IN TESTING ENV
-            if mime_type.startswith('text'):
-                if analyse_count >= 8:
-                    elapsed_time = time.time() - start_time
-                    if elapsed_time < 60:
-                        time.sleep(60 - elapsed_time)  # Sleep to ensure rate limit is not exceeded
-                    analyse_count = 0  # Reset counter
-                    start_time = time.time()  # Reset start time
 
-                num_tokens, summary, hashtags = meta_analyse(file_path)
-                analyse_count += 1  # Increment counter
-            '''
             if mime_type.startswith('text'):
                 num_tokens, summary, embedded_summary, hashtags = meta_analyse(file_path=file_path)
             elif mime_type in [

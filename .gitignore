@@ -1,6 +1,7 @@
 /MetaCrawler.code-workspace
 .env
 poetry.lock
+*.DS_Store
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -11,3 +12,12 @@ __pycache__/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+Video/*
+
+FIle Parsing.pseudo
+FIle Tree Parsing Ideas.ipynb
+Presentation_Draft.MD
+.DS_Store
+tests/.DS_Store
+tests/Test_Drive/.DS_Store
+tests/Test_Drive/Folder One/.DS_Store

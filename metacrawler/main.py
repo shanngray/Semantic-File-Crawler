@@ -45,17 +45,14 @@ def main():
         password = "abcd1234"
         fs_graph = FileSystemGraph(uri, username, password)
 
-        print(DEBUG)
-        if DEBUG:
-            print(f"Connecting to database at {uri} with username {username}")
-
-        #create_mock_filesystem()
-        #load_mock_fs()
-        #root_dir = '/root'
+        # Set the root directory to start the crawl
         root_dir='/Users/shanngray/AI_Projects/MetaCrawler/tests/Test_Drive'
 
-        print(f"Starting file system walk at: {root_dir}")  # Debug: Confirm the directory path
+        if DEBUG:
+            print(f"Connecting to database at {uri} with username {username}")
+            print(f"Starting file system walk at: {root_dir}")
 
+        # Start crawling the filesystem
         walk_file_system(root_dir, fs_graph)
 
         if DEBUG:
@@ -69,14 +66,13 @@ def main():
             except Exception as e:
                 print(f"Error during database query: {e}")
 
+        # Close the connection to the database
         fs_graph.close()
 
         if DEBUG:
             print("Database connection closed")
     except Exception as e:
         print(f"An error occurred: {e}")
-    #finally:
-    #    close_mock_fs()
 
 if __name__ == "__main__":
     """
