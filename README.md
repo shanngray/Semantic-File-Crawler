@@ -8,7 +8,7 @@ MetaCrawler is designed to crawl over file systems and networks to create semant
 The ultimate goal is to add more meta tags, functioning as a type of a Search Engine Optimisation for future AI agents to retrieve accurate information. 
 
 
-![MetaCrawler](MetaCrawler.jpeg)
+
 
 ## Installation
 ### Neo4j
@@ -62,12 +62,10 @@ Amend "root_directory" to the full path of the directory you wish to crawl.
 main.py
 ```
 root_dir='.../MetaCrawler/tests/Test_Drive'
-
 ```
 ### Start MetaCrawler
 Run this on the root directory (so at /MetaCrawler directory)
 ```bash
 poetry run py metacrawler/main.py
-
-
 ```
+![MetaCrawler](MetaCrawler.jpeg)
