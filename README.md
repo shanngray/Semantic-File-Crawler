@@ -1,9 +1,9 @@
-# MetaCrawler
-![MetaCrawler Cover](metacrawler_cover.jpeg)
+# Semantic File Crawler
+![Semantic FIle Crawler Cover](cover.jpeg)
 
 ## Introduction
 
-MetaCrawler is designed to crawl over file systems and networks to create semantic meta tags, enabling agents to navigate and structure our growing collection of files. This project focuses on document classification and relevance, leveraging AI to handle the otherwise impossible task of organizing vast amounts of data. Our current prototype not only summarises documents but also generates hashtags to enrich semantic search capabilities. 
+Semantic File Crawler is designed to crawl over file systems and networks to create semantic meta tags, enabling agents to navigate and structure our growing collection of files. This project focuses on document classification and relevance, leveraging AI to handle the otherwise impossible task of organizing vast amounts of data. Our current prototype not only summarises documents but also generates hashtags to enrich semantic search capabilities. 
 
 The ultimate goal is to add more meta tags, functioning as a type of a Search Engine Optimisation for future AI agents to retrieve accurate information. 
 
@@ -51,9 +51,9 @@ To speed through and get something working, use the following settings instead.
 LANGCHAIN_TRACING_V2="false"
 LANGCHAIN_API_KEY="" # Not needed 
 LANGCHAIN_TRACING_V2 = "false"
-LANGCHAIN_PROJECT = "MetaCrawler"
+LANGCHAIN_PROJECT = "Semantic-File-Crawler"
 OPENAI_API_KEY = "<REQUIRED>" 
-PROJECT_DIRECTORY = "MetaCrawler/metacrawler"
+PROJECT_DIRECTORY = "Semantic-File-Crawler/src"
 AZURE_DOC_KEY="<REQUIRED>"
 TEST="True"
 ```
@@ -61,11 +61,11 @@ Amend "root_directory" to the full path of the directory you wish to crawl.
 
 main.py
 ```
-root_dir='.../MetaCrawler/tests/Test_Drive'
+root_dir='.../Semantic-File-Crawler/tests/Test_Drive'
 ```
-### Start MetaCrawler
-Run this on the root directory (so at /MetaCrawler directory)
+### Start Semantic File Crawler
+Run this on the root directory (so at /Semantic-File-Crawler directory)
 ```bash
-poetry run py metacrawler/main.py
+poetry run py src/main.py
 ```
-![MetaCrawler](MetaCrawler.jpeg)
+![Semantic-Meta-Crawler](file.jpeg)

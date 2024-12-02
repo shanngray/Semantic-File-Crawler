@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "metacrawler"
+name = "semantic-file-crawler"
 version = "0.1.0"
 description = ""
 authors = ["Shannon Gray <shanngray@icloud.com>"]
